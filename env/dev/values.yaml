@@ -1,7 +1,7 @@
 # CI rewrites ONLY the tag line. Argo CD watches this file.
 image:
   repository: ghcr.io/harshit-thecoder/translator
-  tag: "715b60158c17e26c8dca01201406d661c796372a"
+  tag: '4fb629f6c2459b97e629b986b62a5daaefbf1b50'
 
 config:
   LLM_MODEL: "qwen2.5:0.5b"
