@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: translator-dev
+  # Applications always live in the argocd namespace.
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    # Source 1: the Helm chart, in the APP repo.
+    - repoURL: https://github.com/Harshit-TheCoder/translator.git
+      targetRevision: main
+      path: helm/translator
+      helm:
+        # MUST be "translator": the chart builds Service names from it.
+        releaseName: translator
+        valueFiles:
+          # $values = the second source below (the config repo).
+          - $values/env/dev/values.yaml
+    # Source 2: the CONFIG repo. "ref" gives it the name $values.
+    - repoURL: https://github.com/Harshit-TheCoder/translator-config.git
+      targetRevision: main
+      ref: values
+  destination:
+    # The cluster Argo CD itself runs in.
+    server: https://kubernetes.default.svc
+    namespace: translator
+  syncPolicy:
+    automated:
+      # prune: delete cluster objects that were removed from Git.
+      prune: true
+      # selfHeal: undo manual changes made with kubectl.
+      selfHeal: true
+    syncOptions:
+      # Create the translator namespace if it is missing.
+      - CreateNamespace=true

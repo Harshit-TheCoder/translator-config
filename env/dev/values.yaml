@@ -1,0 +1,4 @@
+# CI rewrites ONLY the tag line. Argo CD (Stage 6) watches this file.
+image:
+  repository: ghcr.io/harshit-thecoder/translator
+  tag: "initial"
